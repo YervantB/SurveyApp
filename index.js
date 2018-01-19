@@ -6,8 +6,8 @@ const keys = require('./config/keys'); //hidden keys file
 require('./models/User'); //mongoose schema for 'users' collection
 require('./services/passport'); //google oauth processes
 
-mongoose.connect('mongodb://localhost/User');
-//mongoose.connect(keys.mongoURI); //connect to mlab mongodb database
+//mongoose.connect('mongodb://localhost/User');
+mongoose.connect(keys.mongoURI); //connect to mlab mongodb database
 
 const app = express();
 
