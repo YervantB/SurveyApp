@@ -1,4 +1,8 @@
-module.exports = {
-    googleClientID: "699771158904-a7dei6a5t91td1omcreoobe7lq6emqhj.apps.googleusercontent.com",
-    googleClientSecret: "kIdkhk3zU591kHIJw-V9BcHP"
-};
+if(process.env.NODE_ENV === 'production'){
+    //we are in production - return prod set of keys
+    module.exports = require('./prod');
+}
+else{
+    //we are in developement - return dev set of keys
+    module.exports = require('./dev');
+}
