@@ -22,35 +22,25 @@ passport.use(
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback',
         proxy:true
-}, (accessToken, refreshToken, profile, done) => {
-    /** NOTE **/
-    /* mongodb findOne is a query middleware, it iterates through the collection in the 
-       database asyncronously.  It then catches the ?first? record/document which has a 
-       property to match with the parameter object passed into findOne.  
-       You .then() catch the record, which is just an object, and perform an operation with it.
-    */
-    User.findOne({googleID: profile.id}) //async(promise) to find user with matching googleID
-        .then((existingUser) => { 
-            if(existingUser) {
-                //do not create a new record
-                console.log('user with googleId-'+ existingUser.googleID + '- already exists');
-                done(null, existingUser);
-            }
-            else{
-                //create new record 
-                new User({ 
-                    googleID: profile.id,
-                    last_name: profile.name.familyName,
-                    first_name: profile.name.givenName,
-                    member_since: new Date(Date.now())
-                })
-                .save(err => { 
-                    if(err) return err; 
-                })
-                .then(user => done(null,user));
+}, async (accessToken, refreshToken, profile, done) => {
 
-                console.log('new user created!');
-            }
-        })
-        console.log("done:",done);
+    const existingUser = await User.findOne({googleID: profile.id}) //async(promise) to find user with matching googleID
+            
+    if(existingUser) {
+        //do not create a new record
+        console.log('user with googleId-'+ existingUser.googleID + '- already exists');
+        return done(null, existingUser);
+    }
+    //create new record 
+    const user = await new User({ 
+        googleID: profile.id,
+        last_name: profile.name.familyName,
+        first_name: profile.name.givenName,
+        member_since: new Date(Date.now())
+    }).save(err => { 
+        if(err) return err; 
+    })
+    done(null,user);
+    
+    console.log("done:",done);
 }));

@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "nodemon index.js"
+    "server": "nodemon index.js",
+    "client": "npm run start  --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -22,7 +24,7 @@
     "localtunnel": "^1.8.3",
     "lodash": "^4.17.4",
     "mongoose": "^4.13.9",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.14.11",
     "passport": "^0.3.2",
     "passport-google-oauth20": "^1.0.0",
     "path-parser": "^2.0.2",
